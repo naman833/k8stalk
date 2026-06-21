@@ -12,6 +12,7 @@
 - [Why k8stalk](#why-k8stalk)
 - [Quick Demo](#quick-demo)
 - [Installation](#installation)
+- [Getting Started](#getting-started)
 - [Configuring an LLM Backend](#configuring-an-llm-backend)
 - [Connecting to Your Cluster](#connecting-to-your-cluster)
 - [Usage](#usage)
@@ -95,9 +96,47 @@ limit to at least 512Mi with a request of 384Mi.
 
 The `diagnose` command uses the LLM agent loop: it decides which tools to call, inspects the pod, reads events, checks for recent GitOps syncs, dismisses irrelevant signals, and produces a single coherent explanation.
 
+### Fast mode — reliable with smaller models
+
+For local models or smaller LLMs that struggle with multi-step tool selection, `--fast` gathers everything upfront and asks the LLM once:
+
+```console
+$ k8stalk diagnose "why is payment-processor crashlooping?" --fast
+
+⠋ Gathering diagnostics...
+⠋ Analyzing with LLM...
+
+Root cause: OOMKilled — the "worker" container in payment-processor-6f8b4d7c9-xk2lp
+is exceeding its 256Mi memory limit and being killed by the kernel (exit code 137,
+7 restarts). Increase the memory limit to at least 512Mi.
+```
+
+### Interactive chat UI
+
+For multi-turn investigation, launch the browser-based chat:
+
+```console
+$ k8stalk chat
+Chat history stored locally at ~/.config/k8stalk/history.db
+Starting server on http://localhost:8080
+Opening browser...
+```
+
+The web UI supports full conversational diagnosis with persistent session history — ask follow-up questions, drill into specific resources, and export findings.
+
 ---
 
 ## Installation
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew install naman833/k8stalk/k8stalk
+```
+
+### Pre-built binaries
+
+Download from [GitHub Releases](https://github.com/naman833/k8stalk/releases) — available for Linux, macOS, and Windows (amd64/arm64). Also available as `.deb`, `.rpm`, and `.apk` packages.
 
 ### Build from source
 
@@ -109,25 +148,56 @@ cd k8stalk
 make build
 ```
 
-This produces a `./k8stalk` binary in the project root. Or with `go` directly:
+---
+
+## Getting Started
+
+After installing, run the interactive setup wizard:
 
 ```bash
-go build -o k8stalk .
+k8stalk init
 ```
 
-### Homebrew (once a release is tagged)
+The wizard walks you through backend selection, model configuration, and connectivity testing:
 
-A goreleaser configuration is included; the [Homebrew tap](https://github.com/naman833/homebrew-k8stalk) has not yet been created. Once the first release is published:
+```console
+$ k8stalk init
+
+Supported backends:
+  1) anthropic
+  2) ollama
+  3) openai
+  4) azureopenai
+  5) google
+  6) vertexai
+  7) amazonbedrock
+  8) customrest
+
+Select backend [1-8]: 2
+Ollama base URL [http://localhost:11434]:
+
+Installed Ollama models:
+  1) gemma4:12b
+
+Select model [1-1] or type a name: 1
+
+Testing connectivity to ollama (model: gemma4:12b)...
+Connected successfully (response: ok)
+
+You're set up with ollama (gemma4:12b).
+Using your current Kubernetes context: arn:aws:eks:us-east-1:123456789012:cluster/my-cluster.
+
+Run your first scan:
+  k8stalk analyze
+
+Then try: k8stalk diagnose "<question>" or k8stalk chat for the interactive UI.
+```
+
+That's it — you're ready. Run your first cluster scan:
 
 ```bash
-brew install naman833/k8stalk/k8stalk
+k8stalk analyze
 ```
-
-This is **not yet published** — build from source for now.
-
-### Pre-built binaries
-
-Cross-platform binaries (Linux/macOS/Windows, amd64/arm64) will be available on the [Releases](https://github.com/naman833/k8stalk/releases) page once the first release is tagged via goreleaser.
 
 ---
 
@@ -141,7 +211,7 @@ k8stalk requires an LLM backend for `diagnose`, `chat`, and `analyze --explain`.
 k8stalk init
 ```
 
-The init wizard walks you through:
+The init wizard:
 
 1. Displays all 8 supported backends and lets you choose one
 2. **For Ollama**: checks if Ollama is running locally, lists your pulled models, and lets you pick one
@@ -459,7 +529,7 @@ ArgoCD access is handled via ArgoCD's own API token (set via `ARGOCD_AUTH_TOKEN`
 
 Based on the [project plan](k8s-agent-PLAN.md):
 
-- [ ] First tagged release + Homebrew tap publishing
+- [x] First tagged release + Homebrew tap publishing
 - [ ] Additional providers for full k8sgpt parity (watsonx, Cohere, SageMaker — stretch goals)
 - [ ] ConfigMap/Secret analyzer (detect referenced-but-missing configmaps)
 - [ ] Richer web UI (session search, conversation export, tool-call visualization)
