@@ -1,0 +1,61 @@
+version: 2
+
+project_name: k8stalk
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    binary: k8stalk
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+brews:
+  - repository:
+      owner: naman833
+      name: homebrew-k8stalk
+    homepage: "https://github.com/naman833/k8stalk"
+    description: "GitOps-aware Kubernetes diagnostics agent"
+    license: "Apache-2.0"
+    install: |
+      bin.install "k8stalk"
+    test: |
+      system "#{bin}/k8stalk", "--help"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+
+nfpms:
+  - package_name: k8stalk
+    homepage: "https://github.com/naman833/k8stalk"
+    description: "GitOps-aware Kubernetes diagnostics agent"
+    license: "Apache-2.0"
+    formats:
+      - deb
+      - rpm
+      - apk
