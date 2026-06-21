@@ -27,15 +27,17 @@ archives:
       - goos: windows
         formats: [zip]
 
-homebrew_casks:
+brews:
   - repository:
       owner: naman833
       name: homebrew-k8stalk
     homepage: "https://github.com/naman833/k8stalk"
     description: "GitOps-aware Kubernetes diagnostics agent"
     license: "Apache-2.0"
-    binaries:
-      - k8stalk
+    install: |
+      bin.install "k8stalk"
+    test: |
+      system "#{bin}/k8stalk", "--version"
 
 checksum:
   name_template: "checksums.txt"
