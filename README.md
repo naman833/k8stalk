@@ -10,9 +10,9 @@
 ## Table of Contents
 
 - [Why k8stalk](#why-k8stalk)
-- [Quick Demo](#quick-demo)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Quick Demo](#quick-demo)
 - [Configuring an LLM Backend](#configuring-an-llm-backend)
 - [Connecting to Your Cluster](#connecting-to-your-cluster)
 - [Usage](#usage)
@@ -37,6 +37,81 @@ What makes k8stalk different from [k8sgpt](https://github.com/k8sgpt-ai/k8sgpt):
 - **Native GitOps correlation** — automatically detects whether ArgoCD apps or Flux Kustomizations/HelmReleases had recent syncs that correlate with workload failures, using timing proximity, owner references, and label selectors.
 - **Conversational multi-turn diagnosis** — instead of one-shot "explain this finding", the agent loop lets the LLM investigate iteratively: check a pod, then its events, then the owning deployment, then correlate with a recent ArgoCD sync, then synthesize a single coherent answer.
 - **Fully local/offline operation via Ollama** — run the entire tool with zero data leaving your machine. No API keys, no cloud calls. Plug in any locally-pulled model and diagnose with complete privacy.
+
+---
+
+## Installation
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew install naman833/k8stalk/k8stalk
+```
+
+### Pre-built binaries
+
+Download from [GitHub Releases](https://github.com/naman833/k8stalk/releases) — available for Linux, macOS, and Windows (amd64/arm64). Also available as `.deb`, `.rpm`, and `.apk` packages.
+
+### Build from source
+
+Requires **Go 1.25+** (see `go.mod`).
+
+```bash
+git clone https://github.com/naman833/k8stalk.git
+cd k8stalk
+make build
+```
+
+---
+
+## Getting Started
+
+After installing, run the interactive setup wizard:
+
+```bash
+k8stalk init
+```
+
+The wizard walks you through backend selection, model configuration, and connectivity testing:
+
+```console
+$ k8stalk init
+
+Supported backends:
+  1) anthropic
+  2) ollama
+  3) openai
+  4) azureopenai
+  5) google
+  6) vertexai
+  7) amazonbedrock
+  8) customrest
+
+Select backend [1-8]: 2
+Ollama base URL [http://localhost:11434]:
+
+Installed Ollama models:
+  1) gemma4:12b
+
+Select model [1-1] or type a name: 1
+
+Testing connectivity to ollama (model: gemma4:12b)...
+Connected successfully (response: ok)
+
+You're set up with ollama (gemma4:12b).
+Using your current Kubernetes context: arn:aws:eks:us-east-1:123456789012:cluster/my-cluster.
+
+Run your first scan:
+  k8stalk analyze
+
+Then try: k8stalk diagnose "<question>" or k8stalk chat for the interactive UI.
+```
+
+That's it — you're ready. Run your first cluster scan:
+
+```bash
+k8stalk analyze
+```
 
 ---
 
@@ -123,81 +198,6 @@ Opening browser...
 ```
 
 The web UI supports full conversational diagnosis with persistent session history — ask follow-up questions, drill into specific resources, and export findings.
-
----
-
-## Installation
-
-### Homebrew (macOS/Linux)
-
-```bash
-brew install naman833/k8stalk/k8stalk
-```
-
-### Pre-built binaries
-
-Download from [GitHub Releases](https://github.com/naman833/k8stalk/releases) — available for Linux, macOS, and Windows (amd64/arm64). Also available as `.deb`, `.rpm`, and `.apk` packages.
-
-### Build from source
-
-Requires **Go 1.25+** (see `go.mod`).
-
-```bash
-git clone https://github.com/naman833/k8stalk.git
-cd k8stalk
-make build
-```
-
----
-
-## Getting Started
-
-After installing, run the interactive setup wizard:
-
-```bash
-k8stalk init
-```
-
-The wizard walks you through backend selection, model configuration, and connectivity testing:
-
-```console
-$ k8stalk init
-
-Supported backends:
-  1) anthropic
-  2) ollama
-  3) openai
-  4) azureopenai
-  5) google
-  6) vertexai
-  7) amazonbedrock
-  8) customrest
-
-Select backend [1-8]: 2
-Ollama base URL [http://localhost:11434]:
-
-Installed Ollama models:
-  1) gemma4:12b
-
-Select model [1-1] or type a name: 1
-
-Testing connectivity to ollama (model: gemma4:12b)...
-Connected successfully (response: ok)
-
-You're set up with ollama (gemma4:12b).
-Using your current Kubernetes context: arn:aws:eks:us-east-1:123456789012:cluster/my-cluster.
-
-Run your first scan:
-  k8stalk analyze
-
-Then try: k8stalk diagnose "<question>" or k8stalk chat for the interactive UI.
-```
-
-That's it — you're ready. Run your first cluster scan:
-
-```bash
-k8stalk analyze
-```
 
 ---
 
