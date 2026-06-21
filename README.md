@@ -117,7 +117,7 @@ go build -o k8stalk .
 
 ### Homebrew (once a release is tagged)
 
-A goreleaser configuration and [Homebrew tap](https://github.com/naman833/homebrew-k8stalk) are set up. Once the first release is published:
+A goreleaser configuration is included; the [Homebrew tap](https://github.com/naman833/homebrew-k8stalk) has not yet been created. Once the first release is published:
 
 ```bash
 brew install naman833/k8stalk/k8stalk

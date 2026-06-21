@@ -24,6 +24,15 @@ It combines k8sgpt-style static analysis with agentic multi-step reasoning
 and native ArgoCD/Flux awareness.`,
 }
 
+// SetVersion wires the build-time version string into the root command,
+// which enables the --version/-v flag. Falls back to "dev" if unset.
+func SetVersion(v string) {
+	if v == "" {
+		v = "dev"
+	}
+	rootCmd.Version = v
+}
+
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", "", "Kubernetes namespace (default: all namespaces)")
 	rootCmd.PersistentFlags().StringVar(&kubeCtx, "context", "", "Kubernetes context to use")

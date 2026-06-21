@@ -21,23 +21,21 @@ builds:
     binary: k8stalk
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 
-brews:
+homebrew_casks:
   - repository:
       owner: naman833
       name: homebrew-k8stalk
     homepage: "https://github.com/naman833/k8stalk"
     description: "GitOps-aware Kubernetes diagnostics agent"
     license: "Apache-2.0"
-    install: |
-      bin.install "k8stalk"
-    test: |
-      system "#{bin}/k8stalk", "--help"
+    binaries:
+      - k8stalk
 
 checksum:
   name_template: "checksums.txt"
@@ -52,6 +50,7 @@ changelog:
 
 nfpms:
   - package_name: k8stalk
+    maintainer: "naman833 <pandeynaman833@gmail.com>"
     homepage: "https://github.com/naman833/k8stalk"
     description: "GitOps-aware Kubernetes diagnostics agent"
     license: "Apache-2.0"
