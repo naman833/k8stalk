@@ -2,8 +2,15 @@
 
 **GitOps-aware, conversational Kubernetes diagnostics agent.**
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Go](https://img.shields.io/badge/Go-1.25+-00ADD8.svg)](https://go.dev)
+`k8stalk` scans your Kubernetes clusters, diagnoses issues using agentic multi-step reasoning, and correlates failures with ArgoCD/Flux GitOps activity — all in plain English.
+
+*Out of the box integration with Ollama (fully local), OpenAI, Anthropic, Azure OpenAI, Google Gemini, Vertex AI, AWS Bedrock, and any OpenAI-compatible endpoint.*
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/naman833/k8stalk.svg)](https://github.com/naman833/k8stalk)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/naman833/k8stalk)](https://github.com/naman833/k8stalk/releases)
+[![GitHub last commit](https://img.shields.io/github/last-commit/naman833/k8stalk/main)](https://github.com/naman833/k8stalk/commits/main)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/naman833/k8stalk)](https://github.com/naman833/k8stalk)
 
 ---
 
