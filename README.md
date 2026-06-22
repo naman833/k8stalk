@@ -12,7 +12,6 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/naman833/k8stalk/main)](https://github.com/naman833/k8stalk/commits/main)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/naman833/k8stalk)](https://github.com/naman833/k8stalk)
 
----
 
 ## Table of Contents
 
@@ -31,7 +30,6 @@
 - [Contributing](#contributing)
 - [License](#license)
 
----
 
 ## Why k8stalk
 
@@ -45,7 +43,6 @@ What makes k8stalk different from [k8sgpt](https://github.com/k8sgpt-ai/k8sgpt):
 - **Conversational multi-turn diagnosis** — instead of one-shot "explain this finding", the agent loop lets the LLM investigate iteratively: check a pod, then its events, then the owning deployment, then correlate with a recent ArgoCD sync, then synthesize a single coherent answer.
 - **Fully local/offline operation via Ollama** — run the entire tool with zero data leaving your machine. No API keys, no cloud calls. Plug in any locally-pulled model and diagnose with complete privacy.
 
----
 
 ## Installation
 
@@ -69,7 +66,6 @@ cd k8stalk
 make build
 ```
 
----
 
 ## Getting Started
 
@@ -120,7 +116,6 @@ That's it — you're ready. Run your first cluster scan:
 k8stalk analyze
 ```
 
----
 
 ## Quick Demo
 
@@ -206,7 +201,6 @@ Opening browser...
 
 The web UI supports full conversational diagnosis with persistent session history — ask follow-up questions, drill into specific resources, and export findings.
 
----
 
 ## Configuring an LLM Backend
 
@@ -277,7 +271,6 @@ k8stalk diagnose "why is my pod failing?" -b anthropic -m claude-sonnet-4-202505
 k8stalk analyze --explain -b ollama -m llama3.1:8b
 ```
 
----
 
 ## Connecting to Your Cluster
 
@@ -299,7 +292,6 @@ k8stalk analyze --context staging --namespace default
 
 If no `--namespace` is specified, k8stalk operates across all namespaces the current credentials have access to.
 
----
 
 ## Usage
 
@@ -403,7 +395,6 @@ k8stalk init
 | `--output` | `-o` | Output format: `text` or `json` (default: `text`) |
 | `--no-anonymize` | | Disable data anonymization (only use with local backends) |
 
----
 
 ## GitOps Awareness (ArgoCD & Flux)
 
@@ -435,7 +426,6 @@ Flux integration requires no additional configuration — Flux state lives in CR
 
 The `correlate_gitops` tool checks whether a failing resource's first-seen failure time falls within a **15-minute window** of the last ArgoCD sync or Flux reconciliation. This is the single highest-value heuristic for incident response in GitOps environments: "did a GitOps sync touch this recently?"
 
----
 
 ## Data Privacy & Anonymization
 
@@ -446,7 +436,6 @@ k8stalk is designed for privacy by default:
 - **Chat history**: stored locally at `~/.config/k8stalk/history.db` (pure-Go SQLite via `modernc.org/sqlite`). Never transmitted anywhere.
 - **Read-only**: k8stalk never modifies your cluster. All Kubernetes API calls are read operations.
 
----
 
 ## RBAC Requirements
 
@@ -494,7 +483,6 @@ rules:
 
 ArgoCD access is handled via ArgoCD's own API token (set via `ARGOCD_AUTH_TOKEN`), not through Kubernetes RBAC.
 
----
 
 ## Architecture
 
@@ -530,7 +518,6 @@ ArgoCD access is handled via ArgoCD's own API token (set via `ARGOCD_AUTH_TOKEN`
 
 **Key design principle**: every analyzer and GitOps adapter implements the `agent.Tool` interface exactly once. In `analyze` mode they run as a fixed deterministic sweep; in `diagnose`/`chat` mode the same tools are exposed to the LLM so it can select which ones to invoke based on the user's question. One implementation, two consumption modes.
 
----
 
 ## Roadmap
 
@@ -545,7 +532,6 @@ Based on the [project plan](k8s-agent-PLAN.md):
 
 **Non-goals for v1:** no hosted multi-tenant SaaS, no in-cluster relay agent, no automated write actions. Everything is local, read-only, BYO-LLM-key.
 
----
 
 ## Contributing
 
@@ -557,7 +543,6 @@ make test        # run tests with race detector
 make lint        # golangci-lint
 ```
 
----
 
 ## License
 
