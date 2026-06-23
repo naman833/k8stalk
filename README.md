@@ -13,6 +13,9 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/naman833/k8stalk/main)](https://github.com/naman833/k8stalk/commits/main)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/naman833/k8stalk)](https://github.com/naman833/k8stalk)
 
+![k8stalk demo](docs/assets/demo.gif)
+
+*k8stalk diagnosing a CrashLoopBackOff in real time*
 
 ## Table of Contents
 
@@ -121,6 +124,8 @@ k8stalk analyze
 ## Quick Demo
 
 Suppose you have a pod stuck in CrashLoopBackOff. There's also a stale `FailedScheduling` event from an earlier incident on the same node — a red herring that wastes time if you're reading events manually.
+
+![k8stalk flow](docs/assets/k8stalk-flow-dark.png)
 
 ### Static analysis catches the deterministic signal
 
@@ -487,35 +492,7 @@ ArgoCD access is handled via ArgoCD's own API token (set via `ARGOCD_AUTH_TOKEN`
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      CLI (cobra)                             │
-│  analyze │ diagnose │ chat │ serve │ dump │ auth │ init     │
-└────────────────────────────┬────────────────────────────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-     ┌──────▼───────┐ ┌─────▼──────┐  ┌──────▼───────┐
-     │ Analyze mode  │ │ Agent Core │  │  Web UI      │
-     │ fixed sweep,  │ │ pkg/agent/ │  │  pkg/webui/  │
-     │ deterministic │ │ tool loop  │  │  SSE stream  │
-     └──────┬───────┘ └─────┬──────┘  └──────┬───────┘
-            └────────┬───────┴─────────┬──────┘
-                     │                 │
-      ┌──────────────▼───┐     ┌───────▼─────────┐
-      │  K8s Analyzers    │     │  LLM Providers   │
-      │  16 resource types│     │  8 backends      │
-      ├──────────────────-┤     ├──────────────────┤
-      │  GitOps Adapters  │     │  Sanitizer       │
-      │  ArgoCD (3 tools) │     │  pkg/sanitize/   │
-      │  Flux (3 tools)   │     └──────────────────┘
-      └────────┬──────────┘
-               │
-      ┌────────▼──────────┐
-      │  pkg/k8s/          │
-      │  client-go wrapper │
-      └───────────────────┘
-```
+![k8stalk architecture](docs/assets/k8stalk-architecture.png)
 
 **Key design principle**: every analyzer and GitOps adapter implements the `agent.Tool` interface exactly once. In `analyze` mode they run as a fixed deterministic sweep; in `diagnose`/`chat` mode the same tools are exposed to the LLM so it can select which ones to invoke based on the user's question. One implementation, two consumption modes.
 
