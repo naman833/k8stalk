@@ -6,6 +6,7 @@
 
 *Out of the box integration with Ollama (fully local), OpenAI, Anthropic, Azure OpenAI, Google Gemini, Vertex AI, AWS Bedrock, and any OpenAI-compatible endpoint.*
 
+[![CI](https://github.com/naman833/k8stalk/actions/workflows/ci.yml/badge.svg)](https://github.com/naman833/k8stalk/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/naman833/k8stalk.svg)](https://github.com/naman833/k8stalk)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/naman833/k8stalk)](https://github.com/naman833/k8stalk/releases)
