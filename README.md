@@ -521,8 +521,6 @@ ArgoCD access is handled via ArgoCD's own API token (set via `ARGOCD_AUTH_TOKEN`
 
 ## Roadmap
 
-Based on the [project plan](k8s-agent-PLAN.md):
-
 - [x] First tagged release + Homebrew tap publishing
 - [ ] Additional providers for full k8sgpt parity (watsonx, Cohere, SageMaker — stretch goals)
 - [ ] ConfigMap/Secret analyzer (detect referenced-but-missing configmaps)
